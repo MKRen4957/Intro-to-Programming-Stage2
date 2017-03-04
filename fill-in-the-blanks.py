@@ -37,9 +37,56 @@ tuple, and ___4___ or can be more complicated such as objects and lambda functio
 
 def main:
     #main function to run the game
-    game = true
+    game = True
     while game:
         wrongGuessNum = raw_input("Select maximum wrong guesses: ")
-        while wrongGuessNum < 0:
-            wrongGuessNum = raw_input("Select maximum wrong guesses: ")
-        while wrongGuessNum > 0:
+        while wrongGuessNum <= 0:
+            wrongGuessNum = raw_input("Invalid input, select maximum wrong guesses: ")
+        minLevel = 1
+        maxLevel = 3
+        level = raw_input("Select difficulty level (1 - 3): ")
+        while level < minLevel and level > maxLevel:
+            level = raw_input("Invalid input, select difficulty level (1 - 3): ")
+        print paraGenerator(level)
+        curBlank = 1
+        wrongGuess = 0
+        maxBlank = 4
+        while wrongGuess < wrongGuessNum:
+            guess = raw_input("Word in the "+str(curBlank)+" blank: ")
+            if guess == missedWords(level, curBlank):
+                print "Correct!"
+                curBlank += 1
+            else:
+                wrontGuess += 1
+            if curBlank == maxBlank:
+                print "All blanks correctly filled, good job"
+                game = False
+                break
+        print "Maximum wrong guesses reached, game over"
+        game = False
+
+def paraGenerator(index):
+    paragraphs = [
+        "Voldemort himself created his ---1--- enemy, just as ---2--- everywhere do! \
+        Have you any idea how much ---2--- fear the people they oppress? All of them \
+        realize that, one day, amongst their many ---3---, there is sure to be one who \
+        rises against them and ---4--- back!",
+        "There are many Beths in the world, shy and ---1---, sitting in corners till needed, \
+        and living for others so ---2--- that no one sees the ---3--- till the little \
+        cricket on the hearth stops ---4---, and the sweet, sunshiny presence vanishes, \
+        leaving silence and shadow behind.",
+        "The rules of the Hunger Games are simple. In ---1--- for the uprising, \
+        each of the twelve districts must provide one girl and one boy, called ---2---, \
+        to participate. The twenty-four ---2--- will be imprisoned in a vast outdoor \
+        arena that could hold anything from a burning desert to a frozen wasteland. \
+        Over a period of several ---3---, the competitors must fight to the ---4---. \
+        The last ---2--- standing wins."
+    ]
+    return paragraphs[index]
+def missedWords(index1, index2):
+    missingWords = [
+        ["worst", "tyrants", "victims", "strikes"],
+        ["quiet", "cheerfully", "sacrifices", "chirping"],
+        ["punishment", "tributes", "weeks", "death"]
+    ]
+    return missingWords[index1][index2]
