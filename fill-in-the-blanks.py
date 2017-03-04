@@ -44,19 +44,28 @@ def main:
             wrongGuessNum = raw_input("Invalid input, select maximum wrong guesses: ")
         minLevel = 1
         maxLevel = 3
-        level = raw_input("Select difficulty level (1 - 3): ")
-        while level < minLevel and level > maxLevel:
-            level = raw_input("Invalid input, select difficulty level (1 - 3): ")
-        print paraGenerator(level)
+        level = raw_input("Select difficulty level (easy/med/hard): ")
+        while level != "easy" and level != "med" and level != "hard":
+            level = raw_input("Invalid input, select difficulty level (easy/med/hard): ")
+        if level == "easy":
+            lvl = 0
+        elif level == "med":
+            lvl = 1
+        else:
+            lvl = 2
+        selPara = paraGenerator(lvl)
+        print selPara
         curBlank = 1
         wrongGuess = 0
-        maxBlank = 4
+        maxBlank = 5
         while wrongGuess < wrongGuessNum:
-            guess = raw_input("Word in the "+str(curBlank)+" blank: ")
-            if guess == missedWords(level, curBlank):
+            guess = raw_input("Word in the ___"+str(curBlank)+"___ blank: ")
+            if guess == missingWords(lvl, curBlank):
                 print "Correct!"
+                selPara = fillPara(selPara, guess, curBlank)
                 curBlank += 1
             else:
+                print "Try again"
                 wrontGuess += 1
             if curBlank == maxBlank:
                 print "All blanks correctly filled, good job"
@@ -65,28 +74,48 @@ def main:
         print "Maximum wrong guesses reached, game over"
         game = False
 
-def paraGenerator(index):
+def paraGenerator(diffLvl):
+    #a list contains a paragraph for each difficulty level
     paragraphs = [
-        "Voldemort himself created his ---1--- enemy, just as ---2--- everywhere do! \
-        Have you any idea how much ---2--- fear the people they oppress? All of them \
-        realize that, one day, amongst their many ---3---, there is sure to be one who \
-        rises against them and ---4--- back!",
-        "There are many Beths in the world, shy and ---1---, sitting in corners till needed, \
-        and living for others so ---2--- that no one sees the ---3--- till the little \
-        cricket on the hearth stops ---4---, and the sweet, sunshiny presence vanishes, \
+        "Voldemort himself created his ___1___ enemy, just as ___2___ everywhere do! \
+        Have you any idea how much ___2___ fear the people they oppress? All of them \
+        realize that, one day, amongst their many ___3___, there is sure to be one who \
+        rises against them and ___4___ back!",
+        "There are many Beths in the world, shy and ___1___, sitting in corners till needed, \
+        and living for others so ___2___ that no one sees the ___3___ till the little \
+        cricket on the hearth stops ___4___, and the sweet, sunshiny presence vanishes, \
         leaving silence and shadow behind.",
-        "The rules of the Hunger Games are simple. In ---1--- for the uprising, \
-        each of the twelve districts must provide one girl and one boy, called ---2---, \
-        to participate. The twenty-four ---2--- will be imprisoned in a vast outdoor \
+        "The rules of the Hunger Games are simple. In ___1___ for the uprising, \
+        each of the twelve districts must provide one girl and one boy, called ___2___, \
+        to participate. The twenty-four ___2___ will be imprisoned in a vast outdoor \
         arena that could hold anything from a burning desert to a frozen wasteland. \
-        Over a period of several ---3---, the competitors must fight to the ---4---. \
-        The last ---2--- standing wins."
+        Over a period of several ___3___ the competitors must fight to the ___4___. \
+        The last ___2___ standing wins."
     ]
-    return paragraphs[index]
-def missedWords(index1, index2):
+    return paragraphs[diffLvl]
+def missingWords(diffLvl, blankNum):
+    #a list of lists contains the missing words
     missingWords = [
         ["worst", "tyrants", "victims", "strikes"],
         ["quiet", "cheerfully", "sacrifices", "chirping"],
         ["punishment", "tributes", "weeks", "death"]
     ]
-    return missingWords[index1][index2]
+    return missingWords[diffLvl][blankNum]
+def fillPara(paragraph, guess, blankNum):
+    #return the filled paragraph
+    wordList = []
+    wordList = paragraph.split()
+    for word in wordList:
+        if word.find(str(blankNum)) != -1:
+            pos = wordList.index(word)
+            word = word.replace("___"+str(blankNum)+"___", guess)
+            wordList[pos] = word
+    return " ".join(wordList)
+
+a = "Voldemort himself created his ___1___ enemy, just as ___2___ everywhere do! \
+Have you any idea how much ___2___ fear the people they oppress? All of them \
+realize that, one day, amongst their many ___3___, there is sure to be one who \
+rises against them and ___4___ back!"
+b = "x"
+c = 1
+print fillPara(a,b,c)
