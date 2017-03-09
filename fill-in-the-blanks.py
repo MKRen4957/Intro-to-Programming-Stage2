@@ -39,10 +39,7 @@ def run_game(max_wrong_guess, level):
     # move to the next blank and reset the wrong guess counter back to zero. The game
     # will stop either when the wrong guess reaches maximum defined by the user or
     # the user correctly fills all the blanks.
-    game = True
-    cur_blank = 1
-    wrong_guess = 0
-    max_blank = 5
+    cur_blank, wrong_guess, max_blank = 1, 0, 5
     sel_para = game_data[level]['paragrah']
     print sel_para
     while wrong_guess < max_wrong_guess and cur_blank < max_blank:
